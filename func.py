@@ -1,6 +1,7 @@
+# https://www.figma.com/community/file/1041082497681424521/responsive-calculator-app
+
 import flet as ft
 from flet import RoundedRectangleBorder
-
 import time
 import os
 
@@ -37,8 +38,8 @@ def main(page: ft.Page):
     page.theme = ft.Theme(font_family='Open Sans')
     page.theme_mode = ft.ThemeMode.DARK
 
-    ''' functions '''
 
+    ''' functions '''
     def theme_switcher(e):
         global text_color, operators_bg, action_bg, numbers_bg
 
@@ -55,17 +56,49 @@ def main(page: ft.Page):
             action_bg = colors['dark'][1]
             numbers_bg = colors['dark'][2]
 
-        print(operators_bg)
+        update_button_styles([plus_or_minus_button], operators_bg, text_color, 16)
+        update_button_styles([delete_button], numbers_bg, text_color, 14.3)
+        update_button_styles([clear_button], operators_bg, text_color, 18)
+        update_button_styles([division_button, multiplication_button, minus_button, plus_button, equals_button], action_bg, ft.colors.WHITE if theme == 'dark' else ft.colors.BLACK, 18)
+        update_button_styles([seven_button, eight_button, nine_button, four_button, five_button, six_button, one_button, two_button, three_button, comma_button, zero_button], numbers_bg, text_color, 18)
+        page.update()
+
+    def update_button_styles(buttons, bgcolor, text_color, font_size):
+        for button in buttons:
+            button.style = ft.ButtonStyle(
+                shape=RoundedRectangleBorder(radius=15),
+                bgcolor=bgcolor,
+                color=text_color,
+                text_style=ft.TextStyle(size=font_size)
+            )
+            button.update()
 
     def exit_from_app(e):
         os.system('taskkill /f /im flet.exe')
 
     def insert(user_value, action):
         if action == 'number':
+            if output.value in ['/', '*', '+', '-']:
+                history.value += output.value
+                output.value = ''
             if len(output.value) != 13:
                 output.value += user_value
         elif action == 'operator':
-            pass
+            history.value += output.value
+            output.value = user_value
+        elif action == 'equals':
+            try:
+                history.value += output.value
+                output.value = round(eval(history.value), 6)
+            except Exception as e:
+                output.value = e
+        elif action == 'clear':
+            history.value = ''
+            output.value = ''
+        elif action == 'delete':
+            output.value = output.value[:-1]
+        elif action == 'minus':
+            output.value = '(-' + output.value + ')'
 
         page.update()
 
@@ -112,11 +145,12 @@ def main(page: ft.Page):
             text_style=ft.TextStyle(
                 size=24
             )
-        )
+        ),
+        on_click=lambda e: insert(None, 'clear')
     )
 
     plus_or_minus_button = ft.ElevatedButton(
-        content=ft.Image(src='dark/icons/plus_or_minus.png', width=18, height=18),
+        text='+/-',
         width=button_size,
         height=button_size,
         style=ft.ButtonStyle(
@@ -124,27 +158,16 @@ def main(page: ft.Page):
             bgcolor=operators_bg,
             color=text_color,
             text_style=ft.TextStyle(
-                size=18
+                size=16
             )
-        )
+        ),
+        on_click=lambda e: insert(None, 'minus')
     )
 
-    percentage_button = ft.ElevatedButton(
-        text='%',
-        width=button_size,
-        height=button_size,
-        style=ft.ButtonStyle(
-            shape=RoundedRectangleBorder(radius=20),
-            bgcolor=operators_bg,
-            color=text_color,
-            text_style=ft.TextStyle(
-                size=18
-            )
-        )
-    )
+    empty = ft.Container(width=button_size, height=button_size)
 
     division_button = ft.ElevatedButton(
-        content=ft.Image(src='both/icons/division.png', width=18, height=18),
+        text='/',
         width=button_size,
         height=button_size,
         style=ft.ButtonStyle(
@@ -205,7 +228,7 @@ def main(page: ft.Page):
     )
 
     multiplication_button = ft.ElevatedButton(
-        content=ft.Image(src='both/icons/multiplication.png', width=128, height=128),
+        text='*',
         width=button_size,
         height=button_size,
         style=ft.ButtonStyle(
@@ -337,7 +360,8 @@ def main(page: ft.Page):
             text_style=ft.TextStyle(
                 size=18
             )
-        )
+        ),
+        on_click=lambda e: insert('+', 'operator')
     )
 
     # row 6
@@ -352,7 +376,8 @@ def main(page: ft.Page):
             text_style=ft.TextStyle(
                 size=18
             )
-        )
+        ),
+        on_click=lambda e: insert('.', 'number')
     )
 
     zero_button = ft.ElevatedButton(
@@ -371,7 +396,7 @@ def main(page: ft.Page):
     )
 
     delete_button = ft.ElevatedButton(
-        content=ft.Image(src='dark/icons/delete.png', width=128, height=128),
+        text='DEL',
         width=button_size,
         height=button_size,
         style=ft.ButtonStyle(
@@ -379,9 +404,10 @@ def main(page: ft.Page):
             bgcolor=numbers_bg,
             color=text_color,
             text_style=ft.TextStyle(
-                size=18
+                size=14.3
             )
-        )
+        ),
+        on_click=lambda e: insert(None, 'delete')
     )
 
     equals_button = ft.ElevatedButton(
@@ -395,7 +421,8 @@ def main(page: ft.Page):
             text_style=ft.TextStyle(
                 size=18
             )
-        )
+        ),
+        on_click=lambda e: insert(None, 'equals')
     )
 
     # output
@@ -423,7 +450,7 @@ def main(page: ft.Page):
 
     ''' rows'''
     first_row = [clock, drawer_opener]
-    second_row = [clear_button, plus_or_minus_button, percentage_button, division_button]
+    second_row = [clear_button, plus_or_minus_button, empty, division_button]
     third_row = [seven_button, eight_button, nine_button, multiplication_button]
     fourth_row = [four_button, five_button, six_button, minus_button]
     fifth_row = [one_button, two_button, three_button, plus_button]
