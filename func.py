@@ -448,6 +448,7 @@ def main(page: ft.Page):
         )
     )
 
+
     ''' rows'''
     first_row = [clock, drawer_opener]
     second_row = [clear_button, plus_or_minus_button, empty, division_button]
@@ -455,6 +456,7 @@ def main(page: ft.Page):
     fourth_row = [four_button, five_button, six_button, minus_button]
     fifth_row = [one_button, two_button, three_button, plus_button]
     sixth_row = [comma_button, zero_button, delete_button, equals_button]
+
 
     ''' add components to page '''
     page.add (
@@ -469,6 +471,7 @@ def main(page: ft.Page):
         ft.Row(controls=fifth_row, alignment=ft.MainAxisAlignment.CENTER),
         ft.Row(controls=sixth_row, alignment=ft.MainAxisAlignment.CENTER)
     )
+
 
     ''' main loop '''
     while True:
