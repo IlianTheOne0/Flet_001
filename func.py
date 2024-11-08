@@ -35,7 +35,7 @@ def main(page: ft.Page):
     page.window_height = 700
     page.window_resizable = False
 
-    page.theme = ft.Theme(font_family='Open Sans')
+    page.theme = ft.Theme(font_family='fonts/OpenSans-Regular.ttf')
     page.theme_mode = ft.ThemeMode.DARK
 
 
