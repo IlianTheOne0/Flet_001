@@ -73,5 +73,5 @@ third_part = ft.Container(
         vertical_alignment=ft.CrossAxisAlignment.END,
         spacing=100
     ),
-    padding=ft.Padding(top=200, right=0, left=0, bottom=0)
+    padding=ft.Padding(top=150, right=0, left=0, bottom=0)
 )
