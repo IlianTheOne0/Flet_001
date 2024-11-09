@@ -2,39 +2,31 @@
 
 import flet as ft
 
+from files.header.first_part import *
+from files.second_part import *
+from files.third_part import *
+from files.fourth_part import *
+from files.fifth_part import *
+from files.sixth_part import *
+from files.footer import *
+
 def start():
     ft.app(main, assets_dir='assets', view=ft.AppView.WEB_BROWSER)
 
 def main(page: ft.Page):
+    page.title = 'School site'
+
     page.theme = ft.Theme(font_family='fonts/OpenSans-Regular.ttf')
-    page.theme = ft.ThemeMode.LIGHT
+    page.theme_mode = ft.ThemeMode.LIGHT
 
-    # header
-    brandname = ft.Text (
-        'Brandname',
-        size=24
-    )
-
-    home_button = ft.CupertinoButton(
-        content=ft.Text('Home'),
-        opacity_on_click=0.3
-    )
-    product_button = ft.CupertinoButton(
-        content=ft.Text('Product'),
-        opacity_on_click=0.3
-    )
-    pricing_button = ft.CupertinoButton(
-        content=ft.Text('Pricing'),
-        opacity_on_click=0.3
-    )
-    contact_button = ft.CupertinoButton(
-        content=ft.Text('Contact'),
-        opacity_on_click=0.3
-    )
-
-
-    header = ft.Row([brandname, home_button, product_button, pricing_button, contact_button])
+    page.scroll = ft.ScrollMode.AUTO
 
     page.add(
-        header
+        first_part,
+        second_part,
+        third_part,
+        fourth_part,
+        fifth_part,
+        sixth_part,
+        footer
     )
